@@ -11,7 +11,6 @@ import 'package:insta_image_viewer/insta_image_viewer.dart';
 import 'firebase_options.dart';
 import 'package:getwidget/getwidget.dart';
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -47,20 +46,65 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-       
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      
-        backgroundColor: Colors.black,
+      appBar:AppBar(title:Text('DogSwag')),
+      backgroundColor: Color.fromARGB(31, 17, 16, 16),
       floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            showDialog(
-                context: context,
-                builder: ((context) => PostBox(
-                      size: size,
-                    )));
-          },
-          child: const Icon(Icons.add)),
+        child:Icon(Icons.add),
+        onPressed: () {
+          showModalBottomSheet(
+            context: context,
+            builder: (context) {
+              return Container(
+                height: 150,
+                padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                child: Column(
+                  children: [
+                    ListTile(
+                      leading: Icon(Icons.book),
+                      title: Text('Post a story'),
+                      onTap: () {
+                        Navigator.pop(context);
+                        showDialog(
+                            context: context,
+                            builder: ((context) => PostBox(
+                                  size: size,
+                                )));
+                      },
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.face),
+                      title: Text('Post a poem'),
+                      onTap: () {
+                        Navigator.pop(context);
+                        showDialog(
+                            context: context,
+                            builder: ((context) => PostBox(
+                                  size: size,
+                                )));
+                      },
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.post_add),
+                      title: Text('Post a meme'),
+                      onTap: () {Navigator.pop(context);
+                        showDialog(
+                            context: context,
+                            builder: ((context) => PostBox(
+                                  size: size,
+                                  
+                        
+                        )));
+                      },
+                    ),
+                  ],
+                ),
+              );
+            },
+          );
+        },
+      ),
       body: StreamBuilder<QuerySnapshot>(
           stream: _postStream,
           builder: ((context, snapshot) {
@@ -83,9 +127,20 @@ class _HomePageState extends State<HomePage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                ImageNetwork(
+                                Container(
+  decoration: BoxDecoration(
+    
+    border: Border.all(color: 
+       Color(0xff2c3e50),
+        width: 2.0, style: BorderStyle.solid),
+    borderRadius: BorderRadius.all(Radius.circular(30))
+  ),
+  
+
+                              child:ImageNetwork(
                                     debugPrint: true,
                                     curve: Curves.easeIn,
+                              
                                     onTap: () {
                                       String docId =
                                           snapshot.data!.docs[index].id;
@@ -111,7 +166,7 @@ class _HomePageState extends State<HomePage> {
 
                                 // ListView.builder(
                                 //     itemBuilder: snapshot.data!.docs[index])
-                              ],
+                             ) ],
                             ),
                           ],
                         )),
@@ -143,12 +198,12 @@ class DescriptionPage extends StatelessWidget {
     TextEditingController commentController = TextEditingController();
     return AlertDialog(
       content: Column(
-        mainAxisSize: MainAxisSize.min,
         children: [
-          ImageNetwork(
+   ImageNetwork(
               image: imgUrl,
               width: size.width * 0.5,
               height: size.height * 0.5),
+          
           if (comments.isEmpty)
             const Padding(
               padding: EdgeInsets.symmetric(vertical: 30),
@@ -185,7 +240,8 @@ class DescriptionPage extends StatelessWidget {
                     maxLength: 10,
                     autocorrect: true,
                     decoration: const InputDecoration(
-                        labelText: 'Add Your Story', border: OutlineInputBorder()),
+                        labelText: 'Add Your Story',
+                        border: OutlineInputBorder()),
                   ),
                 ),
                 Expanded(
@@ -206,6 +262,7 @@ class DescriptionPage extends StatelessWidget {
             )
         ],
       ),
+    
       actions: [
         ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
@@ -266,9 +323,9 @@ class _PostBoxState extends State<PostBox> {
                         },
                         child: fetchedImg
                             ? Container()
-                            : const Text('Fetch image'))
+                            : const Text('Upload'))
                   else
-                    ImageNetwork(
+                  ImageNetwork(
                         fitWeb: BoxFitWeb.fill,
                         image: imgUrl,
                         height: widget.size.height * 0.5,
